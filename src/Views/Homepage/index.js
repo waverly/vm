@@ -1,12 +1,13 @@
 // @flow
 
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import Prismic from "prismic-javascript";
-import styled from "styled-components";
+import { RichText, Date } from "prismic-reactjs";
+import styled, { css } from "styled-components";
 
-import ArticleModule from "Components/Article";
-import ResourceModule from "Components/Resource";
-import RecommendedModule from "Components/Recommended";
+import ProjectThumbnail from "Components/ProjectThumbnail";
+import { linkResolver } from "Utils/prismic-configuration";
 import { generateKey } from "Utils/helpers";
 
 import {
@@ -17,23 +18,18 @@ import {
 
 const apiEndpoint = "https://vicentemunoz.prismic.io/api/v2";
 
-const homeGraphQuery = `{
-  article {
-    subtitle
-    title
-    hero_image
-    author {
-      uid
-      first_name
-      last_name
-    }
-  }
-  resource {
-    title
-    subtitle
-    thumbnail
-  }
-}`;
+const HomeFlexWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+`;
+
+const Column = styled.div`
+  flex: 1;
+  justify-content: flex-start;
+  align-items: center;
+  padding: ${props => props.theme.padding.column};
+`;
 
 class Homepage extends Component {
   state = {
@@ -41,106 +37,80 @@ class Homepage extends Component {
   };
 
   componentDidMount() {
+    // API call for project thumbnails and titles
     Prismic.api(apiEndpoint).then(api => {
       api
-        .query(Prismic.Predicates.at("document.type", "home"), {
-          // graphQuery: homeGraphQuery
-          fetchLinks: [
-            "project.title",
-            "project.subtitle",
-            "project.hero_image",
-            "project.author",
-          ]
-        })
+        .query(Prismic.Predicates.at("document.type", "project"))
         .then(response => {
-          const slices = response.results[0].data.body;
+          // const slices = response.results[0].data.body;
           console.log(response.results);
-          // console.log(slices);
-          //
-          // // put data in an object and add object to state
-          // const parsedSlices = slices.map(d => {
-          //   // parse data for necessary content
-          //
-          //   switch (d.slice_type) {
-          //     // if single article module
-          //     case "article_module":
-          //       // if it is an article_module, mine the content relationship
-          //
-          //       console.log(d.primary.article.data.related_article.value.uid);
-          //
-          //       return {
-          //         module_type: d.slice_type,
-          //         article: fetchArticle(d.primary.article, "article")
-          //       };
-          //
-          //     // if recommended block
-          //     case "recommended":
-          //       const title = d.primary.title[0].text;
-          //       const subtitle = d.primary.subtitle[0].text;
-          //       const type = d.slice_type;
-          //       const recommended_items = d.items.map(i => {
-          //         const article = i.recommended_item;
-          //         // console.log(article);
-          //         return {
-          //           article: fetchArticle(article, "article")
-          //         };
-          //       });
-          //       return {
-          //         title,
-          //         subtitle,
-          //         recommended_items,
-          //         module_type: d.slice_type
-          //       };
-          //
-          //     // if resource module
-          //     case "resource_module":
-          //       // if it is a resource_module, mine the content relationship
-          //       const resource = d.primary.resource;
-          //       return {
-          //         resource: fetchResource(resource, "resource"),
-          //         module_type: d.slice_type
-          //       };
-          //     default:
-          //       return;
-             }
+
+          const projects = response.results.map(project => {
+            let { uid } = project;
+            let { title, subtitle, thumbnail } = project.data;
+            title = title[0].text;
+            subtitle = subtitle[0].text;
+            thumbnail = thumbnail.url;
+            return { title, subtitle, thumbnail, uid };
           });
 
           // create a new "State" object without mutating
           // the original State object.
-          // const newState = Object.assign({}, this.state, {
-          //   data: parsedSlices
-          // });
-
+          const newState = Object.assign({}, this.state, {
+            projects
+          });
           // store the new state object in the component's state
-          // this.setState(newState);
+          this.setState(newState);
+        });
+    });
+
+    // API call for homepage data
+    Prismic.api(apiEndpoint).then(api => {
+      api
+        .query(Prismic.Predicates.at("document.type", "home"))
+        .then(response => {
+          // const slices = response.results[0].data.body;
+          // console.log(response.results);
+          let data = {};
+          const homeData = response.results[0].data;
+          let information = homeData.information;
+          data.information = RichText.render(information, linkResolver);
+
+          data.title = homeData.title[0].text;
+
+          // create a new "State" object without mutating
+          // the original State object.
+          const newState = Object.assign({}, this.state, {
+            data
+          });
+          // store the new state object in the component's state
+          this.setState(newState);
         });
     });
   }
 
   render() {
     return (
-      <div>
-          <h1>homepage hi</h1>
-        {/* {this.state.data.map(i => {
-          switch (i.module_type) {
-            case "article_module":
-              // logic to determine which size article component to render
-              return (
-                <ArticleModule
-                  key={generateKey("article")}
-                  data={i.article}
-                  module_type={i.module_type}
-                />
-              );
-            case "resource_module":
-              return <ResourceModule key={generateKey("resource")} data={i} />;
-            case "recommended":
-              return (
-                <RecommendedModule key={generateKey("recommended")} data={i} />
-              );
-          }
-        })} */}
-      </div>
+      <HomeFlexWrap>
+        <Column>
+          <h1>{this.state.data.title}</h1>
+        </Column>
+        <Column>
+          <h1>Information</h1>
+          <div>{this.state.data.information}</div>
+        </Column>
+        <Column>
+          {this.state.projects ? (
+            this.state.projects.map(project => (
+              <Link key={project.uid} to={`/${project.uid}`}>
+                <ProjectThumbnail data={project.uid} />
+              </Link>
+            ))
+          ) : (
+            <h1>no projects</h1>
+          )}
+        </Column>
+      </HomeFlexWrap>
     );
   }
 }

@@ -2,7 +2,7 @@ import { css } from "styled-components";
 
 export const theme = {
   // mixins
-
+  test: "#E53D3d",
   mixins: {
     flex_row_wrap: css`
       width: 100%;
@@ -47,19 +47,16 @@ export const theme = {
   // padding and margins
 
   padding: {
-    article: "60px"
+    article: "60px",
+    column: "60px"
   },
 
   // end padding and margins
 
   // type
   fontSize: {
-    h1: "25px",
-    h2: "20px",
-    h3: "16px",
-    p: "16px",
-    h4: "14px",
-    h5: "12px"
+    header: "132px",
+    body: "11px"
   },
 
   fontFamily: {

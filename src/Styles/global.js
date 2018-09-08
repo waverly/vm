@@ -13,12 +13,17 @@ export const globalStyles = css`
 		font-weight: 300;
 	}
 
+	body {
+		color: ${props => props.theme.color.darkGray};
+	}
+
 	form {
 		margin: 0;
 	}
 
 	button, input, select, option, textarea {
 		background: white;
+
 		font-family: ${props => props.theme.fontFamily.cormorant};
 		font-weight: 300;
 		border: none;
@@ -38,8 +43,10 @@ export const globalStyles = css`
 	}
 
 	h1, h2, h3, h4, h5, h6, p, li, ol {
-		font-weight: ${props => props.theme.fontWeight.heavy};
+		COLOR: ${props => props.theme.colors.red};;
+		font-weight: ${props => props.theme.fontWeight.medium};
 		margin: 0;
+		font-size: ${props => props.theme.fontSize.header};
 	}
 
 	a {
