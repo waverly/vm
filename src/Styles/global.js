@@ -13,6 +13,13 @@ export const globalStyles = css`
 		font-weight: 300;
 	}
 
+	/* TODO: refactor to add support in IE and Mozilla */
+
+	::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
+	}
+
 	body {
 		color: ${props => props.theme.color.darkGray};
 	}
@@ -43,10 +50,15 @@ export const globalStyles = css`
 	}
 
 	h1, h2, h3, h4, h5, h6, p, li, ol {
-		COLOR: ${props => props.theme.colors.red};;
+		color: ${props => props.theme.colors.red};;
 		font-weight: ${props => props.theme.fontWeight.medium};
 		margin: 0;
 		font-size: ${props => props.theme.fontSize.header};
+		font-size: 1em!important;
+	}
+
+	p{
+		font-size: ${props => props.theme.fontSize.body};
 	}
 
 	a {

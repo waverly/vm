@@ -47,6 +47,7 @@ class Homepage extends Component {
 
           const projects = response.results.map(project => {
             let { uid } = project;
+            console.log(project.data);
             let { title, subtitle, thumbnail } = project.data;
             title = title[0].text;
             subtitle = subtitle[0].text;
@@ -103,7 +104,7 @@ class Homepage extends Component {
           {this.state.projects ? (
             this.state.projects.map(project => (
               <Link key={project.uid} to={`/${project.uid}`}>
-                <ProjectThumbnail data={project.uid} />
+                <ProjectThumbnail data={project} />
               </Link>
             ))
           ) : (

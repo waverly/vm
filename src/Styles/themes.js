@@ -2,13 +2,19 @@ import { css } from "styled-components";
 
 export const theme = {
   // mixins
-  test: "#E53D3d",
+  test: "blue",
   mixins: {
     flex_row_wrap: css`
       width: 100%;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
+      align-items: center;
+    `,
+    flex_row_nowrap: css`
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
       align-items: center;
     `
   },
@@ -30,6 +36,11 @@ export const theme = {
     threeDot: 110,
     modal: 120,
     alert: 150
+  },
+
+  height: {
+    header: "100px",
+    mobileHeader: "75px"
   },
 
   spacing: {
@@ -55,12 +66,12 @@ export const theme = {
 
   // type
   fontSize: {
-    header: "132px",
+    header: "13px",
     body: "11px"
   },
 
   fontFamily: {
-    cormorant: "'Cormorant', serif"
+    cormorant: "serif"
   },
 
   fontWeight: {
