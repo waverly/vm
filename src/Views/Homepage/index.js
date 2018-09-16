@@ -16,6 +16,8 @@ const HomeFlexWrap = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: nowrap;
+  opacity: ${props => (props.loaded ? 1 : 0)};
+  transition: 1s opacity;
   ${media.mobile`
     flex-direction: column;
   `};
@@ -50,25 +52,45 @@ const ImageWrapper = styled.div`
 
 class Homepage extends Component {
   state = {
-    data: []
+    data: [],
+    loaded: false
+  };
+
+  dynamicSort = property => {
+    var sortOrder = 1;
+    if (property[0] === "-") {
+      sortOrder = -1;
+      property = property.substr(1);
+    }
+    return function(a, b) {
+      var result =
+        a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
+      return result * sortOrder;
+    };
   };
 
   componentDidMount() {
+    setTimeout(() => {
+      this.setState({ loaded: true });
+    }, 500);
     // API call for project thumbnails and titles
     Prismic.api(apiEndpoint).then(api => {
       api
-        .query(Prismic.Predicates.at("document.type", "project"))
+        .query(Prismic.Predicates.at("document.type", "project"), {
+          orderings: "[my.project.order]"
+        })
         .then(response => {
           const projects = response.results.map(project => {
+            console.log(project);
             let { uid } = project;
-            let { title, subtitle, thumbnail } = project.data;
+            let { title, subtitle, thumbnail, order } = project.data;
             title = title[0].text;
             if (subtitle[0]) {
               subtitle = subtitle[0].text;
             }
 
             thumbnail = thumbnail.url;
-            return { title, subtitle, thumbnail, uid };
+            return { title, subtitle, thumbnail, uid, order };
           });
 
           // create a new "State" object without mutating
@@ -108,7 +130,7 @@ class Homepage extends Component {
 
   render() {
     return (
-      <HomeFlexWrap>
+      <HomeFlexWrap loaded={this.state.loaded}>
         <Column>
           <h1>{this.state.data.title}</h1>
         </Column>

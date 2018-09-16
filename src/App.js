@@ -30,12 +30,15 @@ class App extends Component {
     }, 500);
   }
   render() {
-    const { match, location, history } = this.props;
-    console.log(location);
     return (
       <ThemeProvider theme={theme}>
         <Wrapper loaded={this.state.loaded}>
-          <Route
+          <Switch>
+            <Route path="/" exact component={Homepage} />
+            <Route path="/:project" exact component={Project} />
+            {/* <Route component={NotFound} /> */}
+          </Switch>
+          {/* <Route
             render={({ location }) => (
               <ReactCSSTransitionReplace
                 transitionName="fade"
@@ -47,13 +50,12 @@ class App extends Component {
                     <Switch>
                       <Route path="/" exact component={Homepage} />
                       <Route path="/:project" exact component={Project} />
-                      {/* <Route component={NotFound} /> */}
                     </Switch>
                   </Switch>
                 </div>
               </ReactCSSTransitionReplace>
             )}
-          />
+          /> */}
         </Wrapper>
       </ThemeProvider>
     );

@@ -5,30 +5,34 @@ import styled from "styled-components";
 import { media } from "Styles/style-utils";
 
 const Wrapper = styled.div`
-  width: auto;
-  margin: 0 ${props => props.theme.spacing.triple};
-  display: inline-block;
-  display: ${props => (props.src ? "inline" : "none")};
-  flex: 0 0 auto;
+  padding: 0 ${props => props.theme.spacing.triple};
+  display: ${props => (props.imageSrc ? "inline-block" : "none")};
+  width: auto !important;
+  height: 100%;
   position: relative;
+  display: inline-block;
+  flex: 0 0 auto;
   img {
     height: 100%;
+    max-width: unset;
+    width: auto;
   }
-
   ${media.mobile`
-    width: 100%;
-    padding: 0;
-    margin: ${props => props.theme.spacing.double} 0;
-    img {
-      height: auto;
-      width: 100%;
-    }
+      padding: ${props => props.theme.spacing.single};
+      img {
+        height: auto;
+        width: 100%;
+      }
   `};
 `;
 
 const ImageWrapper = styled.div`
-  padding: ${props => props.paddingV}em ${props => props.paddingH}em;
+  padding-top: ${props => (props.paddingV ? `${props.paddingV}em` : 0)};
+  padding-bottom: ${props => (props.paddingV ? `${props.paddingV}em` : 0)};
+  padding-left: ${props => (props.paddingH ? `${props.paddingH}em` : 0)};
+  padding-right: ${props => (props.paddingH ? `${props.paddingH}em` : 0)};
   height: calc(100% - ${props => props.theme.height.caption});
+
   img {
     height: 100%;
   }
@@ -49,11 +53,11 @@ const Caption = styled.p`
 `;
 
 const ImageItem = props => {
-  const { src, caption, paddingH, paddingV } = props;
+  const { imageSrc, caption, paddingH, paddingV } = props;
   return (
-    <Wrapper src={src}>
+    <Wrapper imageSrc={imageSrc}>
       <ImageWrapper paddingH={paddingH} paddingV={paddingV}>
-        <img src={src} />
+        <img src={imageSrc} />
       </ImageWrapper>
       <Caption>{caption}</Caption>
     </Wrapper>
