@@ -66,6 +66,7 @@ export const globalStyles = css`
 
 	p{
 		font-size: 12px;
+		line-height: 14px;
 		font-weight: 400;
 	}
 

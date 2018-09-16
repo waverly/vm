@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import TextItem from "Components/TextItem";
 import ImageItem from "Components/ImageItem";
@@ -29,17 +30,6 @@ const Right = styled.div`
   top: ${props => props.theme.spacing.triple};
   right: ${props => props.theme.spacing.triple};
 `;
-
-// const Body = styled.div`
-//   height: 70vh;
-//   width: 100vw;
-//   top: 15vh;
-//   left: 0;
-//   right: 0;
-//   position: fixed;
-//   overflow-x: auto;
-//   background: red;
-// `;
 
 const BodyInner = styled.div`
   position: fixed;
@@ -105,8 +95,10 @@ class Project extends Component {
       <ProjectWrapper>
         <Header>
           <Left>
-            <h1>Vicente Muñoz</h1>
-            <p>Back</p>
+            <Link to="/">
+              <h1>Vicente Muñoz</h1>
+              <p>Back</p>
+            </Link>
           </Left>
           <Right>
             <h1>{this.state.data.title}</h1>
