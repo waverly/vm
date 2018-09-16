@@ -1,5 +1,8 @@
 import React, { Component, Fragment } from "react";
 import styled from "styled-components";
+import TextItem from "Components/TextItem";
+import ImageItem from "Components/ImageItem";
+import VideoItem from "Components/VideoItem";
 import { generateKey } from "Utils/helpers";
 import { linkResolver } from "Utils/prismic-configuration";
 import Prismic from "prismic-javascript";
@@ -12,7 +15,6 @@ const Header = styled.div`
   position: fixed;
   width: 100vw;
   height: ${props => props.theme.height.header};
-  background-color: ${props => props.theme.test};
   z-index: ${props => props.theme.z.titleBar};
 `;
 
@@ -42,6 +44,7 @@ const Right = styled.div`
 const BodyInner = styled.div`
   position: fixed;
   height: 60vh;
+  width: 100vw;
   top: 20vh;
   display: flex;
   flex-wrap: nowrap;
@@ -114,32 +117,40 @@ class Project extends Component {
         <BodyInner>
           {this.state.data.body ? (
             this.state.data.body.map(b => {
-              console.log(b);
               let caption;
               // parse if it is a text or image field
               if (b.slice_type === "text") {
                 const text = RichText.render(b.primary.richtext, linkResolver);
-                console.log(text);
-                return (
-                  <ProjectItem type="text" key={generateKey("text")}>
-                    {text}
-                  </ProjectItem>
-                );
-              } else {
+                return <TextItem text={text} key={generateKey("text")} />;
+              } else if (b.slice_type === "image") {
                 const imageSrc = b.primary.image.url;
+                const paddingH = b.primary.padding_horizontal;
+                const paddingV = b.primary.padding_vertical;
                 b.primary.caption.length > 0
                   ? (caption = b.primary.caption[0].text)
                   : null;
                 return (
-                  <ProjectItem key={generateKey(b.primary.image.url)}>
-                    <img src={imageSrc} alt="" />
-                    <p>{caption}</p>
-                  </ProjectItem>
+                  <ImageItem
+                    paddingH={paddingH}
+                    paddingV={paddingV}
+                    src={imageSrc}
+                    caption={caption}
+                    key={generateKey(b.primary.image.url)}
+                  />
                 );
+              } else if (b.slice_type === "video") {
+                console.log(b);
+                console.log("in video");
+
+                const videoUrl = b.primary.video_file.url;
+                b.primary.caption.length > 0
+                  ? (caption = b.primary.caption[0].text)
+                  : null;
+                return <VideoItem caption={caption} videoUrl={videoUrl} />;
               }
             })
           ) : (
-            <h1>no data</h1>
+            <h1 />
           )}
         </BodyInner>
         {/* </Body> */}

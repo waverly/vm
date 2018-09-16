@@ -7,6 +7,7 @@ import { RichText, Date } from "prismic-reactjs";
 import styled, { css } from "styled-components";
 
 import ProjectThumbnail from "Components/ProjectThumbnail";
+import { media } from "Styles/style-utils";
 import { linkResolver } from "Utils/prismic-configuration";
 import { generateKey } from "Utils/helpers";
 
@@ -22,13 +23,36 @@ const HomeFlexWrap = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: nowrap;
+  ${media.mobile`
+    flex-direction: column;
+  `};
 `;
 
 const Column = styled.div`
-  flex: 1;
+  flex: 1 1 0%;
   justify-content: flex-start;
   align-items: center;
-  padding: ${props => props.theme.padding.column};
+  padding: ${props => props.theme.spacing.triple};
+  h1 {
+    margin-bottom: ${props => props.theme.spacing.double};
+  }
+  ${media.mobile`
+      padding: ${props => props.theme.spacing.single};
+      h1 {
+        margin-bottom: ${props => props.theme.spacing.single};
+      }
+  `};
+`;
+
+const ImageWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  flex: 1 1 0%;
+  a {
+    width: 45%;
+  }
 `;
 
 class Homepage extends Component {
@@ -50,7 +74,10 @@ class Homepage extends Component {
             console.log(project.data);
             let { title, subtitle, thumbnail } = project.data;
             title = title[0].text;
-            subtitle = subtitle[0].text;
+            if (subtitle[0]) {
+              subtitle = subtitle[0].text;
+            }
+
             thumbnail = thumbnail.url;
             return { title, subtitle, thumbnail, uid };
           });
@@ -101,15 +128,18 @@ class Homepage extends Component {
           <div>{this.state.data.information}</div>
         </Column>
         <Column>
-          {this.state.projects ? (
-            this.state.projects.map(project => (
-              <Link key={project.uid} to={`/${project.uid}`}>
-                <ProjectThumbnail data={project} />
-              </Link>
-            ))
-          ) : (
-            <h1>no projects</h1>
-          )}
+          <h1>Work</h1>
+          <ImageWrapper>
+            {this.state.projects ? (
+              this.state.projects.map(project => (
+                <Link key={project.uid} to={`/${project.uid}`}>
+                  <ProjectThumbnail data={project} />
+                </Link>
+              ))
+            ) : (
+              <h1 />
+            )}
+          </ImageWrapper>
         </Column>
       </HomeFlexWrap>
     );

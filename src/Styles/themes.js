@@ -40,6 +40,7 @@ export const theme = {
 
   height: {
     header: "100px",
+    caption: "40px",
     mobileHeader: "75px"
   },
 

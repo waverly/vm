@@ -7,9 +7,14 @@ import normalized from "./normalized";
 export const globalStyles = css`
 	${normalized}
 
+	@font-face {
+	    font-family: futura;
+	    src: url(cdced636-4488-4c04-809c-e6e1379600ec.ttf);
+	}
+
 	html {
 		font-size: 10px;
-		font-family: ${props => props.theme.fontFamily.cormorant};
+		font-family: futura, 'times new roman';
 		font-weight: 300;
 	}
 
@@ -21,7 +26,7 @@ export const globalStyles = css`
 	}
 
 	body {
-		color: ${props => props.theme.color.darkGray};
+		color: #454545;
 	}
 
 	form {
@@ -30,8 +35,6 @@ export const globalStyles = css`
 
 	button, input, select, option, textarea {
 		background: white;
-
-		font-family: ${props => props.theme.fontFamily.cormorant};
 		font-weight: 300;
 		border: none;
 		outline: none;
@@ -50,15 +53,20 @@ export const globalStyles = css`
 	}
 
 	h1, h2, h3, h4, h5, h6, p, li, ol {
-		color: ${props => props.theme.colors.red};;
-		font-weight: ${props => props.theme.fontWeight.medium};
+		font-weight: 600;
 		margin: 0;
-		font-size: ${props => props.theme.fontSize.header};
 		font-size: 1em!important;
+		font-family: futura, 'times new roman';
+	}
+
+	h1, h2, h3{
+		font-size: 14px;
+		line-height: 16px;
 	}
 
 	p{
-		font-size: ${props => props.theme.fontSize.body};
+		font-size: 12px;
+		font-weight: 400;
 	}
 
 	a {
