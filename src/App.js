@@ -3,7 +3,7 @@
 import React, { Component } from "react";
 import { Switch, Route } from "react-router-dom";
 import { withRouter } from "react-router";
-import { TransitionGroup, CSSTransition } from "react-transition-group";
+import ReactCSSTransitionReplace from "react-css-transition-replace";
 import Prismic from "prismic-javascript";
 import styled, { injectGlobal, ThemeProvider } from "styled-components";
 import { globalStyles } from "Styles/global";
@@ -11,8 +11,6 @@ import { theme } from "Styles/themes";
 
 import Homepage from "Views/Homepage";
 import Project from "Views/Project";
-
-const apiEndpoint = "https://pussypedia.prismic.io/api/v2";
 
 const Wrapper = styled.div`
   opacity: ${props => (props.loaded ? 1 : 0)};
@@ -33,18 +31,29 @@ class App extends Component {
   }
   render() {
     const { match, location, history } = this.props;
+    console.log(location);
     return (
       <ThemeProvider theme={theme}>
         <Wrapper loaded={this.state.loaded}>
-          <TransitionGroup>
-            <CSSTransition key={location} timeout={300} classNames="fade">
-              <Switch>
-                <Route path="/" exact component={Homepage} />
-                <Route path="/:project" exact component={Project} />
-                {/* <Route component={NotFound} /> */}
-              </Switch>
-            </CSSTransition>
-          </TransitionGroup>
+          <Route
+            render={({ location }) => (
+              <ReactCSSTransitionReplace
+                transitionName="fade"
+                transitionEnterTimeout={1000}
+                transitionLeaveTimeout={1000}
+              >
+                <div key={location.pathname}>
+                  <Switch location={location}>
+                    <Switch>
+                      <Route path="/" exact component={Homepage} />
+                      <Route path="/:project" exact component={Project} />
+                      {/* <Route component={NotFound} /> */}
+                    </Switch>
+                  </Switch>
+                </div>
+              </ReactCSSTransitionReplace>
+            )}
+          />
         </Wrapper>
       </ThemeProvider>
     );

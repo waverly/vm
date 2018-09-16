@@ -12,6 +12,27 @@ export const globalStyles = css`
 	    src: url(cdced636-4488-4c04-809c-e6e1379600ec.ttf);
 	}
 
+	.fade-leave {
+	  opacity: 1;
+	}
+	.fade-leave.fade-leave-active {
+	  opacity: 0;
+	  transition: opacity 0.5s ease-in;
+	}
+
+	.fade-enter {
+	  opacity: 0;
+	}
+	.fade-enter.fade-enter-active {
+	  opacity: 1;
+	  /* Delay the enter animation until the leave completes */
+	  transition: opacity 0.4s ease-in 0.6s;
+	}
+
+	.fade-height {
+	  transition: height 0s ease-in-out;
+	}
+
 	html {
 		font-size: 10px;
 		font-family: futura, 'times new roman';

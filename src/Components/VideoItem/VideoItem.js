@@ -18,6 +18,10 @@ const Wrapper = styled.div`
     width: 100%;
     padding: 0;
     margin: ${props => props.theme.spacing.double} 0;
+    video {
+      height: auto;
+      width: 100%;
+    }
   `};
 `;
 
@@ -35,6 +39,9 @@ const Caption = styled.p`
   bottom: 0;
   height: ${props => props.theme.height.caption};
   width: 100%;
+  ${media.mobile`
+    position: relative;
+  `};
 `;
 
 type Props = {

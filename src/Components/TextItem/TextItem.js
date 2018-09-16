@@ -44,11 +44,32 @@ class TextItem extends Component<Props, State> {
     textHeight: 0
   };
 
+  stateUpdate = data => {
+    const newState = Object.assign({}, this.state, {
+      data
+    });
+
+    this.setState(newState);
+  };
+
+  updateDimensions = () => {
+    this.stateUpdate({
+      wrapperHeight: this.wrapper.clientHeight,
+      textHeight: this.text.clientHeight
+    });
+  };
+
   componentDidMount() {
     this.setState({
       wrapperHeight: this.wrapper.clientHeight,
       textHeight: this.text.clientHeight
     });
+
+    window.addEventListener("resize", this.updateDimensions);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updateDimensions);
   }
 
   render() {

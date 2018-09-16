@@ -3,19 +3,12 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Prismic from "prismic-javascript";
-import { RichText, Date } from "prismic-reactjs";
-import styled, { css } from "styled-components";
+import { RichText } from "prismic-reactjs";
+import styled from "styled-components";
 
 import ProjectThumbnail from "Components/ProjectThumbnail";
 import { media } from "Styles/style-utils";
 import { linkResolver } from "Utils/prismic-configuration";
-import { generateKey } from "Utils/helpers";
-
-import {
-  fetchArticle,
-  fetchPerson,
-  fetchResource
-} from "Utils/prismic-configuration";
 
 const apiEndpoint = "https://vicentemunoz.prismic.io/api/v2";
 
@@ -66,12 +59,8 @@ class Homepage extends Component {
       api
         .query(Prismic.Predicates.at("document.type", "project"))
         .then(response => {
-          // const slices = response.results[0].data.body;
-          console.log(response.results);
-
           const projects = response.results.map(project => {
             let { uid } = project;
-            console.log(project.data);
             let { title, subtitle, thumbnail } = project.data;
             title = title[0].text;
             if (subtitle[0]) {

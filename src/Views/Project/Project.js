@@ -1,14 +1,14 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import TextItem from "Components/TextItem";
 import ImageItem from "Components/ImageItem";
 import VideoItem from "Components/VideoItem";
+import { media } from "Styles/style-utils";
 import { generateKey } from "Utils/helpers";
 import { linkResolver } from "Utils/prismic-configuration";
 import Prismic from "prismic-javascript";
-import PrismicDOM from "prismic-dom";
-import { RichText, Date } from "prismic-reactjs";
+import { RichText } from "prismic-reactjs";
 const apiEndpoint = "https://vicentemunoz.prismic.io/api/v2";
 
 const ProjectWrapper = styled.div``;
@@ -23,12 +23,18 @@ const Left = styled.div`
   position: fixed;
   top: ${props => props.theme.spacing.triple};
   left: ${props => props.theme.spacing.triple};
+  ${media.mobile`
+    top: ${props => props.theme.spacing.single};
+    left: ${props => props.theme.spacing.single};
+  `};
 `;
 
 const Right = styled.div`
   position: fixed;
   top: ${props => props.theme.spacing.triple};
   right: ${props => props.theme.spacing.triple};
+  top: ${props => props.theme.spacing.single};
+  right: ${props => props.theme.spacing.single};
 `;
 
 const BodyInner = styled.div`
@@ -39,17 +45,15 @@ const BodyInner = styled.div`
   display: flex;
   flex-wrap: nowrap;
   overflow-x: auto;
-`;
 
-const ProjectItem = styled.div`
-  width: ${props => (props.type === "text" ? "500px" : "auto")}
-  margin: 0 ${props => props.theme.spacing.triple};
-  height: 100%;
-  display: inline-block;
-  flex: 0 0 auto;
-  img {
-    height: 100%;
-  }
+  ${media.mobile`
+    flex-direction: column;
+    height: auto;
+    position: relative;
+    overflow-x: hidden;
+    top: 75px;
+
+  `};
 `;
 
 class Project extends Component {
@@ -63,9 +67,6 @@ class Project extends Component {
     const newState = Object.assign({}, this.state, {
       data
     });
-
-    console.log("inside of stateTest");
-    console.log(data);
 
     // store the new state object in the component's state
     this.setState(newState);
@@ -138,7 +139,13 @@ class Project extends Component {
                 b.primary.caption.length > 0
                   ? (caption = b.primary.caption[0].text)
                   : null;
-                return <VideoItem caption={caption} videoUrl={videoUrl} />;
+                return (
+                  <VideoItem
+                    key={generateKey(videoUrl)}
+                    caption={caption}
+                    videoUrl={videoUrl}
+                  />
+                );
               }
             })
           ) : (
