@@ -26,19 +26,29 @@ const Wrapper = styled.div`
 `;
 
 const VideoWrapper = styled.div`
-  padding: ${props => props.paddingV}em ${props => props.paddingH}em;
+  padding-top: ${props => (props.paddingV ? `${props.paddingV}em` : 0)};
+  padding-bottom: ${props => (props.paddingV ? `${props.paddingV}em` : 0)};
+  padding-left: ${props => (props.paddingH ? `${props.paddingH}em` : 0)};
+  padding-right: ${props => (props.paddingH ? `${props.paddingH}em` : 0)};
   height: calc(100% - ${props => props.theme.height.caption});
+
+  video {
+    height: 100%;
+  }
   ${media.mobile`
-    width: 100%;
-    padding: 0;
-  `};
+  width: 100%;
+  padding: 0;
+`};
 `;
 
-const Caption = styled.p`
+const Caption = styled.div`
   position: absolute;
   bottom: 0;
   height: ${props => props.theme.height.caption};
   width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
   ${media.mobile`
     position: relative;
   `};
@@ -50,11 +60,13 @@ type Props = {
 };
 
 const VideoItem = props => {
-  const { videoUrl, caption } = props;
+  const { videoUrl, caption, link } = props;
   return (
     <Wrapper>
       <VideoWrapper>
-        <video src={videoUrl} autoPlay loop muted playsInline />
+        <a href={link} target="_blank">
+          <video src={videoUrl} autoPlay loop muted playsInline />
+        </a>
       </VideoWrapper>
       <Caption>{caption}</Caption>
     </Wrapper>

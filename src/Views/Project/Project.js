@@ -6,9 +6,10 @@ import ImageItem from "Components/ImageItem";
 import VideoItem from "Components/VideoItem";
 import { media } from "Styles/style-utils";
 import { generateKey } from "Utils/helpers";
-import { linkResolver } from "Utils/prismic-configuration";
+
 import Prismic from "prismic-javascript";
 import { RichText } from "prismic-reactjs";
+import { linkResolver } from "Utils/prismic-configuration";
 const apiEndpoint = "https://vicentemunoz.prismic.io/api/v2";
 
 const ProjectWrapper = styled.div`
@@ -45,9 +46,10 @@ const Right = styled.div`
 
 const BodyInner = styled.div`
   position: fixed;
-  height: 60vh;
+  /* used 180 pix rather than 200 to accomodate height of captions */
+  height: calc(100vh - 160px);
   width: 100vw;
-  top: 20vh;
+  top: 100px;
   display: flex;
   flex-wrap: nowrap;
   overflow-x: scroll;
@@ -60,7 +62,8 @@ const BodyInner = styled.div`
     top: 75px;
     div{
       &:last-child{
-        padding-right: 0px;
+        padding-right: auto;
+        margin-bottom: 20px;
       }
     }
 
@@ -96,6 +99,7 @@ class Project extends Component {
     Prismic.api(apiEndpoint).then(api => {
       api.getByUID("project", uid).then(document => {
         const projectData = document.data;
+        console.log(projectData);
         let { title, subtitle, body } = projectData;
         title = title[0].text;
 
@@ -127,6 +131,8 @@ class Project extends Component {
           {this.state.data.body
             ? this.state.data.body.map(b => {
                 let caption;
+                let link;
+                let padding = {};
                 // parse if it is a text or image field
                 if (b.slice_type === "text") {
                   const text = RichText.render(
@@ -136,29 +142,61 @@ class Project extends Component {
                   return <TextItem text={text} key={generateKey("text")} />;
                 } else if (b.slice_type === "image") {
                   const imageSrc = b.primary.image.url;
-                  const paddingH = b.primary.padding_horizontal;
-                  const paddingV = b.primary.padding_vertical;
-                  b.primary.caption.length > 0
-                    ? (caption = b.primary.caption[0].text)
+                  // console.log(b);
+
+                  padding.left = b.primary.padding_left;
+                  padding.right = b.primary.padding_right;
+                  padding.top = b.primary.padding_top;
+                  padding.bottom = b.primary.padding_bottom;
+                  b.primary.captionrichtext.length > 0
+                    ? (caption = b.primary.captionrichtext[0].text)
                     : null;
+
+                  console.log(caption);
+
+                  if (caption) {
+                    caption = RichText.render(
+                      b.primary.captionrichtext,
+                      linkResolver
+                    );
+                  }
+
+                  b.primary.link.url
+                    ? (link = b.primary.link.url)
+                    : (link = null);
                   return (
                     <ImageItem
-                      paddingH={paddingH}
-                      paddingV={paddingV}
-                      imageSrc={imageSrc}
+                      padding={padding}
                       caption={caption}
+                      link={link}
+                      imageSrc={imageSrc}
                       key={generateKey(b.primary.image.url)}
                     />
                   );
                 } else if (b.slice_type === "video") {
                   const videoUrl = b.primary.video_file.url;
-                  b.primary.caption.length > 0
-                    ? (caption = b.primary.caption[0].text)
+
+                  b.primary.link.url
+                    ? (link = b.primary.link.url)
+                    : (link = null);
+
+                  b.primary.captionrichtext.length > 0
+                    ? (caption = b.primary.captionrichtext[0].text)
                     : null;
+
+                  console.log(caption);
+
+                  if (caption) {
+                    caption = RichText.render(
+                      b.primary.captionrichtext,
+                      linkResolver
+                    );
+                  }
                   return (
                     <VideoItem
                       key={generateKey(videoUrl)}
                       caption={caption}
+                      link={link}
                       videoUrl={videoUrl}
                     />
                   );

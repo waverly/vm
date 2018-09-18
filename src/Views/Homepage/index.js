@@ -13,6 +13,8 @@ import { linkResolver } from "Utils/prismic-configuration";
 const apiEndpoint = "https://vicentemunoz.prismic.io/api/v2";
 
 const HomeFlexWrap = styled.div`
+  position: fixed;
+  height: 100vh;
   display: flex;
   justify-content: space-between;
   flex-wrap: nowrap;
@@ -20,6 +22,8 @@ const HomeFlexWrap = styled.div`
   transition: 1s opacity;
   ${media.mobile`
     flex-direction: column;
+    position: unset;
+    height: auto;
   `};
 `;
 
@@ -45,6 +49,8 @@ const ImageWrapper = styled.div`
   -webkit-box-pack: justify;
   justify-content: space-between;
   flex: 1 1 0%;
+  overflow-y: scroll;
+  height: 100%;
   a {
     width: 45%;
   }
@@ -81,7 +87,7 @@ class Homepage extends Component {
         })
         .then(response => {
           const projects = response.results.map(project => {
-            console.log(project);
+            // console.log(project);
             let { uid } = project;
             let { title, subtitle, thumbnail, order } = project.data;
             title = title[0].text;
@@ -113,7 +119,9 @@ class Homepage extends Component {
           let data = {};
           const homeData = response.results[0].data;
           let information = homeData.information;
+          console.log(information);
           data.information = RichText.render(information, linkResolver);
+          console.log(data.information);
 
           data.title = homeData.title[0].text;
 

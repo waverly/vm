@@ -34,7 +34,7 @@ export const globalStyles = css`
 	}
 
 	html {
-		font-size: 10px;
+		font-size: 11px;
 		font-family: futura, 'times new roman';
 		font-weight: 300;
 	}
@@ -76,24 +76,26 @@ export const globalStyles = css`
 	h1, h2, h3, h4, h5, h6, p, li, ol {
 		font-weight: 600;
 		margin: 0;
-		font-size: 1em!important;
 		font-family: futura, 'times new roman';
 	}
 
 	h1, h2, h3{
-		font-size: 14px;
-		line-height: 16px;
+		font-size: 13px;
+		line-height: 17px;
 	}
 
 	p{
 		font-size: 12px;
-		line-height: 15px;
+		line-height: 18px;
 		font-weight: 400;
 	}
 
 	a {
 		text-decoration: none;
 		color: inherit;
+		&:hover{
+			color: #BABABA;
+		}
 	}
 
 	* {

@@ -13,13 +13,22 @@ const Wrapper = styled.div`
   }
 `;
 
+const Caption = styled.div`
+  margin-top: 7px;
+  p {
+    line-height: 16px;
+  }
+`;
+
 const ProjectThumbnail = props => {
   const { title, subtitle, thumbnail } = props.data;
   return (
     <Wrapper>
       <img src={thumbnail} alt="" />
-      <p>{title}</p>
-      <p>{subtitle}</p>
+      <Caption>
+        <p>{title}</p>
+        <p>{subtitle}</p>
+      </Caption>
     </Wrapper>
   );
 };
