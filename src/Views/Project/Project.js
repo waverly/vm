@@ -152,8 +152,6 @@ class Project extends Component {
                     ? (caption = b.primary.captionrichtext[0].text)
                     : null;
 
-                  console.log(caption);
-
                   if (caption) {
                     caption = RichText.render(
                       b.primary.captionrichtext,

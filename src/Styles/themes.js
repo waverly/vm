@@ -44,6 +44,10 @@ export const theme = {
     mobileHeader: "75px"
   },
 
+  width: {
+    column: 300
+  },
+
   spacing: {
     eighth: "2px",
     quarter: "4px",

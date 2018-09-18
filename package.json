@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "flow-bin": "^0.80.0",
+    "lodash": "^4.17.11",
     "prismic-dom": "^2.1.0",
     "prismic-javascript": "^2.0.0-beta.0",
     "prismic-reactjs": "^0.3.1",
