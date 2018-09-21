@@ -33,7 +33,7 @@ const Column = styled.div`
   align-items: center;
   padding: ${props => props.theme.spacing.triple};
   h1 {
-    margin-bottom: ${props => props.theme.spacing.double};
+    margin-bottom: ${props => props.theme.spacing.triple};
   }
   ${media.mobile`
       padding: ${props => props.theme.spacing.single};
@@ -51,6 +51,10 @@ const ImageWrapper = styled.div`
   flex: 1 1 0%;
   overflow-y: scroll;
   height: 100%;
+  ::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+  }
   a {
     width: 45%;
   }

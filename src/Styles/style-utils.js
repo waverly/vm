@@ -3,7 +3,8 @@ import { css } from "styled-components";
 
 export const media = {
   mobile: (...args) => css`
-    @media (max-width: 768px) {
+    @media (max-width: 820px),
+      only screen and and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) {
       ${css(...args)};
     }
   `

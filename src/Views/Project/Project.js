@@ -49,7 +49,7 @@ const BodyInner = styled.div`
   /* used 180 pix rather than 200 to accomodate height of captions */
   height: calc(100vh - 160px);
   width: 100vw;
-  top: 100px;
+  top: 120px;
   display: flex;
   flex-wrap: nowrap;
   overflow-x: scroll;
@@ -119,7 +119,6 @@ class Project extends Component {
           <Left>
             <Link to="/">
               <h1>Vicente Muñoz</h1>
-              <p>Back</p>
             </Link>
           </Left>
           <Right>

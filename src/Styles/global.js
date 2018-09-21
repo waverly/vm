@@ -35,15 +35,15 @@ export const globalStyles = css`
 
 	html {
 		font-size: 11px;
-		font-family: futura, 'times new roman';
+		font-family: futura, 'helvetica', sans-serif;
 		font-weight: 300;
 	}
 
 	/* TODO: refactor to add support in IE and Mozilla */
 
 	::-webkit-scrollbar {
-    width: 0px;  /* remove scrollbar space */
-    background: transparent;  /* optional: just make scrollbar invisible */
+    ${"" /* width: 0px; 
+    background: transparent;   */}
 	}
 
 	body {
@@ -80,8 +80,8 @@ export const globalStyles = css`
 	}
 
 	h1, h2, h3{
-		font-size: 13px;
-		line-height: 17px;
+		font-size: 12px;
+		line-height: 18px;
 	}
 
 	p{

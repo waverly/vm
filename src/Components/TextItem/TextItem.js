@@ -11,13 +11,19 @@ import { media } from "Styles/style-utils";
 
 const Wrapper = styled.div`
   width: auto;
-  max-width: ${props => (props.multiColumn ? props.wrapperWidth : "400px")};
+  max-width: ${props => (props.multiColumn ? props.wrapperWidth : "500px")};
+  width: ${props => (props.multiColumn ? props.wrapperWidth : "500px")};
   height: calc(100% - ${props => props.theme.height.caption});
   overflow: hidden;
   margin: 0 ${props => props.theme.spacing.triple};
   display: inline-block;
   flex: 0 0 auto;
-  padding: 0 ${props => props.theme.padding.column};
+  padding-left: ${props =>
+    props.multiColumn ? props => props.theme.padding.column : "35px"};
+  padding-right: ${props =>
+    props.multiColumn ? props => props.theme.padding.column : "35px"};
+  margin-left: ${props => (props.multiColumn ? "0" : "30px")};
+  margin-right: ${props => (props.multiColumn ? "0" : "30px")};
 
   ${media.mobile`
     max-width: 100%;
@@ -30,7 +36,7 @@ const Wrapper = styled.div`
 const InnerWrapper = styled.div`
   height: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 `;
 
 const TextWrapper = styled.div`
@@ -71,47 +77,94 @@ class TextItem extends Component<Props, State> {
   };
 
   updateDimensions = () => {
-    console.log("inside update dimensions");
-    console.log(this.wrapper, this.text);
-    // console.log(this.wrapper.offsetHeight, this.text.offsetHeight);
-    if (this.wrapper && this.text) {
-      const multiColumn = this.wrapper.clientHeight < this.text.clientHeight;
-      console.log(this.wrapper.clientHeight, this.text.clientHeight);
-      const wrapperWidth = `${Math.ceil(
-        this.text.clientHeight / this.wrapper.clientHeight
-      ) *
-        300 +
-        50}px`;
-      const columnCount = Math.ceil(
-        this.text.clientHeight / this.wrapper.clientHeight
-      );
-      this.stateUpdate({
-        wrapperHeight: this.wrapper.clientHeight,
-        textHeight: this.text.clientHeight,
-        multiColumn,
-        columnCount,
-        wrapperWidth
-      });
-    } else {
-      return;
+    // the problem is that it should only run if the wrapper height changes, and then needs to recalc
+
+    if (this.wrapper) {
+      if (this.wrapper.clientHeight != this.state.wrapperHeight) {
+        let wrapperWidth;
+        console.log("wrapper height changed");
+        console.log(this.wrapper.clientHeight, this.state.wrapperHeight);
+
+        const multiColumn = this.wrapper.clientHeight < this.state.textHeight;
+
+        // wrapperWidth has to be greater if the wrapperHeight is less than 350
+
+        if (this.wrapper.clientHeight > 480) {
+          wrapperWidth = `${Math.ceil(
+            this.state.textHeight / this.wrapper.clientHeight
+          ) *
+            430 +
+            150}px`;
+        } else {
+          wrapperWidth = `${Math.ceil(
+            this.state.textHeight / this.wrapper.clientHeight
+          ) *
+            300 +
+            400}px`;
+        }
+
+        const columnCount = Math.ceil(
+          this.state.textHeight / this.wrapper.clientHeight
+        );
+
+        console.log("lets debug wrapper width");
+
+        console.log({
+          wrapperHeight: this.wrapper.clientHeight,
+          textHeight: this.state.textHeight,
+          multiColumn,
+          wrapperWidth,
+          columnCount
+        });
+        this.stateUpdate({
+          wrapperHeight: this.wrapper.clientHeight,
+          multiColumn,
+          columnCount,
+          wrapperWidth
+        });
+      } else {
+        console.log("wrapper height didnt change");
+      }
     }
   };
 
   componentDidMount() {
     console.log("component did mount");
-    this.updateDimensions();
-    // const multiColumn = this.wrapper.offsetHeight < this.text.offsetHeight;
-    // const wrapperWidth = `${Math.ceil(
-    //   this.text.offsetHeight / this.wrapper.offsetHeight
-    // ) *
-    //   300 +
-    //   50}px`;
-    // this.stateUpdate({
-    //   wrapperHeight: this.wrapper.offsetHeight,
-    //   textHeight: this.text.offsetHeight,
-    //   multiColumn,
-    //   wrapperWidth
-    // });
+    let wrapperWidth;
+
+    const multiColumn = this.wrapper.clientHeight < this.text.clientHeight;
+    if (this.wrapper.clientHeight > 480) {
+      wrapperWidth = `${Math.ceil(
+        this.text.clientHeight / this.wrapper.clientHeight
+      ) *
+        430 +
+        100}px`;
+    } else {
+      wrapperWidth = `${Math.ceil(
+        this.text.clientHeight / this.wrapper.clientHeight
+      ) *
+        300 +
+        400}px`;
+    }
+    const columnCount = Math.ceil(
+      this.text.clientHeight / this.wrapper.clientHeight
+    );
+
+    console.log({
+      wrapperHeight: this.wrapper.clientHeight,
+      textHeight: this.text.clientHeight,
+      multiColumn,
+      wrapperWidth,
+      columnCount
+    });
+    this.stateUpdate({
+      wrapperHeight: this.wrapper.clientHeight,
+      textHeight: this.text.clientHeight,
+      multiColumn,
+      columnCount,
+      wrapperWidth
+    });
+
     window.addEventListener("resize", _.debounce(this.updateDimensions, 500));
   }
 
