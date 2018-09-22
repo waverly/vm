@@ -15,6 +15,7 @@ const apiEndpoint = "https://vicentemunoz.prismic.io/api/v2";
 const HomeFlexWrap = styled.div`
   position: fixed;
   height: 100vh;
+  width: 100vw;
   display: flex;
   justify-content: space-between;
   flex-wrap: nowrap;

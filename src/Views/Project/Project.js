@@ -47,12 +47,29 @@ const Right = styled.div`
 const BodyInner = styled.div`
   position: fixed;
   /* used 180 pix rather than 200 to accomodate height of captions */
-  height: calc(100vh - 160px);
+  height: calc(100vh - 120px);
   width: 100vw;
   top: 120px;
+  padding-bottom: 40px;
   display: flex;
   flex-wrap: nowrap;
-  overflow-x: scroll;
+  overflow: auto;
+
+  @supports (-ms-accelerator: true) {
+    /* IE Edge 12+ CSS styles go here */
+    height: calc(100vh - 140px);
+    width: 100vw;
+    top: 105px;
+    padding-bottom: 40px;
+  }
+
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    /* IE10+ CSS styles go here */
+    height: calc(100vh - 140px);
+    width: 100vw;
+    top: 105px;
+    padding-bottom: 40px;
+  }
 
   ${media.mobile`
     flex-direction: column;
@@ -60,6 +77,7 @@ const BodyInner = styled.div`
     position: relative;
     overflow-x: hidden;
     top: 75px;
+    padding-bottom: 0;
     div{
       &:last-child{
         padding-right: auto;
@@ -122,8 +140,10 @@ class Project extends Component {
             </Link>
           </Left>
           <Right>
-            <h1>{this.state.data.title}</h1>
-            <h1>{this.state.data.subtitle}</h1>
+            <Link to="/">
+              <h1>{this.state.data.title}</h1>
+              <h1>{this.state.data.subtitle}</h1>
+            </Link>
           </Right>
         </Header>
         <BodyInner>

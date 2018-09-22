@@ -9,7 +9,23 @@ export const globalStyles = css`
 
 	@font-face {
 	    font-family: futura;
-	    src: url(cdced636-4488-4c04-809c-e6e1379600ec.ttf);
+
+			src: url(a3756428-debf-4a86-aed0-a834a3df9bd7.eot); /* IE9 Compat Modes */
+			src: url('a3756428-debf-4a86-aed0-a834a3df9bd7.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+					 url(5f081b13-e570-4277-9283-091a6f6cab04.woff2) format('woff2'), /* Super Modern Browsers */
+					 url(588b3f3a-c193-4962-8e01-d4caef90f58b.woff) format('woff'), /* Pretty Modern Browsers */
+					 url(cdced636-4488-4c04-809c-e6e1379600ec.ttf);/* Safari, Android, iOS */
+	}
+
+	@font-face {
+		font-family: futura-medium;
+		src: url(9a9fb331-0d04-4a0f-94d6-4c7c9132678e.eot); /* IE9 Compat Modes */
+		src: url('9a9fb331-0d04-4a0f-94d6-4c7c9132678e.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+				 url(91597685-99ad-4a3c-81b0-84491562b714.woff2) format('woff2'), /* Super Modern Browsers */
+				 url(717bc962-d7ad-40ef-b37b-808824c7f061.woff) format('woff'), /* Pretty Modern Browsers */
+				 url(dfe1dfa8-1fb9-4c68-a199-4f31e702d3c5.ttf); /* Safari, Android, iOS */
+
+
 	}
 
 	.fade-leave {
@@ -42,7 +58,7 @@ export const globalStyles = css`
 	/* TODO: refactor to add support in IE and Mozilla */
 
 	::-webkit-scrollbar {
-    ${"" /* width: 0px; 
+    ${"" /* width: 0px;
     background: transparent;   */}
 	}
 
@@ -74,14 +90,15 @@ export const globalStyles = css`
 	}
 
 	h1, h2, h3, h4, h5, h6, p, li, ol {
-		font-weight: 600;
 		margin: 0;
-		font-family: futura, 'times new roman';
+		font-family: futura, helvetica, sans-serif;
+		font-weight: 400;
 	}
 
 	h1, h2, h3{
 		font-size: 12px;
 		line-height: 18px;
+		font-family: futura-medium, helvetica, sans-serif;
 	}
 
 	p{
