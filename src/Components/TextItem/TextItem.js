@@ -11,19 +11,16 @@ import { media } from "Styles/style-utils";
 
 const Wrapper = styled.div`
   width: auto;
-  max-width: ${props => (props.multiColumn ? props.wrapperWidth : "500px")};
-  width: ${props => (props.multiColumn ? props.wrapperWidth : "500px")};
+  max-width: 500px;
+  width: auto;
   height: calc(100% - ${props => props.theme.height.caption});
   overflow: hidden;
   margin: 0 ${props => props.theme.spacing.triple};
   display: inline-block;
   flex: 0 0 auto;
-  padding-left: ${props =>
-    props.multiColumn ? props => props.theme.padding.column : "35px"};
-  padding-right: ${props =>
-    props.multiColumn ? props => props.theme.padding.column : "35px"};
-  margin-left: ${props => (props.multiColumn ? "0" : "30px")};
-  margin-right: ${props => (props.multiColumn ? "0" : "30px")};
+  padding: 0 35px;
+  margin: 0 30px;
+  overflow: auto;
 
   ${media.mobile`
     max-width: 100%;
@@ -41,12 +38,8 @@ const InnerWrapper = styled.div`
 
 const TextWrapper = styled.div`
   padding: ${props => props.paddingV}em ${props => props.paddingH}em;
-  column-gap: 20px;
-  column-count: ${props => props.columnCount};
-  column-width: ${props => (props.multiColumn ? "300px" : "auto")};
 
   ${media.mobile`
-    column-count: 1;
     height: auto;
   `};
 `;
@@ -72,105 +65,8 @@ class TextItem extends Component<Props, State> {
 
   stateUpdate = data => {
     const newState = Object.assign({}, this.state, data);
-
     this.setState(newState);
   };
-
-  updateDimensions = () => {
-    // the problem is that it should only run if the wrapper height changes, and then needs to recalc
-
-    if (this.wrapper) {
-      if (this.wrapper.clientHeight != this.state.wrapperHeight) {
-        let wrapperWidth;
-        console.log("wrapper height changed");
-        console.log(this.wrapper.clientHeight, this.state.wrapperHeight);
-
-        const multiColumn = this.wrapper.clientHeight < this.state.textHeight;
-
-        // wrapperWidth has to be greater if the wrapperHeight is less than 350
-
-        if (this.wrapper.clientHeight > 480) {
-          wrapperWidth = `${Math.ceil(
-            this.state.textHeight / this.wrapper.clientHeight
-          ) *
-            430 +
-            150}px`;
-        } else {
-          wrapperWidth = `${Math.ceil(
-            this.state.textHeight / this.wrapper.clientHeight
-          ) *
-            300 +
-            400}px`;
-        }
-
-        const columnCount = Math.ceil(
-          this.state.textHeight / this.wrapper.clientHeight
-        );
-
-        console.log("lets debug wrapper width");
-
-        console.log({
-          wrapperHeight: this.wrapper.clientHeight,
-          textHeight: this.state.textHeight,
-          multiColumn,
-          wrapperWidth,
-          columnCount
-        });
-        this.stateUpdate({
-          wrapperHeight: this.wrapper.clientHeight,
-          multiColumn,
-          columnCount,
-          wrapperWidth
-        });
-      } else {
-        console.log("wrapper height didnt change");
-      }
-    }
-  };
-
-  componentDidMount() {
-    console.log("component did mount");
-    let wrapperWidth;
-
-    const multiColumn = this.wrapper.clientHeight < this.text.clientHeight;
-    if (this.wrapper.clientHeight > 480) {
-      wrapperWidth = `${Math.ceil(
-        this.text.clientHeight / this.wrapper.clientHeight
-      ) *
-        430 +
-        100}px`;
-    } else {
-      wrapperWidth = `${Math.ceil(
-        this.text.clientHeight / this.wrapper.clientHeight
-      ) *
-        300 +
-        400}px`;
-    }
-    const columnCount = Math.ceil(
-      this.text.clientHeight / this.wrapper.clientHeight
-    );
-
-    console.log({
-      wrapperHeight: this.wrapper.clientHeight,
-      textHeight: this.text.clientHeight,
-      multiColumn,
-      wrapperWidth,
-      columnCount
-    });
-    this.stateUpdate({
-      wrapperHeight: this.wrapper.clientHeight,
-      textHeight: this.text.clientHeight,
-      multiColumn,
-      columnCount,
-      wrapperWidth
-    });
-
-    window.addEventListener("resize", _.debounce(this.updateDimensions, 500));
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.updateDimensions);
-  }
 
   render() {
     const { text } = this.props;

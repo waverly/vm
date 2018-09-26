@@ -46,7 +46,6 @@ const Right = styled.div`
 
 const BodyInner = styled.div`
   position: fixed;
-  /* used 180 pix rather than 200 to accomodate height of captions */
   height: calc(100vh - 120px);
   width: 100vw;
   top: 120px;
@@ -56,7 +55,6 @@ const BodyInner = styled.div`
   overflow: auto;
 
   @supports (-ms-accelerator: true) {
-    /* IE Edge 12+ CSS styles go here */
     height: calc(100vh - 140px);
     width: 100vw;
     top: 105px;
@@ -91,7 +89,8 @@ const BodyInner = styled.div`
 class Project extends Component {
   state = {
     data: {},
-    loaded: false
+    loaded: false,
+    language: "english"
   };
 
   stateUpdate = data => {
@@ -107,6 +106,15 @@ class Project extends Component {
 
   componentDidMount() {
     const uid = this.props.match.params.project;
+    const spanishUid = `${this.props.match.params.project}-spanish`;
+    console.log(spanishUid);
+
+    const newState = Object.assign({}, this.state, {
+      uid
+    });
+
+    // store the new state object in the component's state
+    this.setState({ uid, spanishUid });
     let apiData;
 
     setTimeout(() => {
@@ -115,20 +123,25 @@ class Project extends Component {
 
     // API call for project thumbnails and titles
     Prismic.api(apiEndpoint).then(api => {
-      api.getByUID("project", uid).then(document => {
+      api.getByUID("project", this.state.uid).then(document => {
         const projectData = document.data;
         console.log(projectData);
         let { title, subtitle, body } = projectData;
         title = title[0].text;
-
         subtitle[0] ? (subtitle = subtitle[0].text) : (subtitle = null);
-
         apiData = { title, subtitle, body };
-
         this.stateUpdate(apiData);
       });
     });
   }
+
+  languageToggle = language => {
+    if (language === "english") {
+      this.setState({ language: "english" });
+    } else {
+      this.setState({ language: "spanish" });
+    }
+  };
 
   render() {
     return (
@@ -144,6 +157,23 @@ class Project extends Component {
               <h1>{this.state.data.title}</h1>
               <h1>{this.state.data.subtitle}</h1>
             </Link>
+            <h1 className="languageToggle">
+              <span
+                onClick={() => {
+                  this.languageToggle("english");
+                }}
+              >
+                EN
+              </span>{" "}
+              /{" "}
+              <span
+                onClick={() => {
+                  this.languageToggle("spanish");
+                }}
+              >
+                ES
+              </span>
+            </h1>
           </Right>
         </Header>
         <BodyInner>
@@ -153,16 +183,33 @@ class Project extends Component {
                 let link;
                 let padding = {};
                 // parse if it is a text or image field
-                if (b.slice_type === "text") {
+
+                // TODO - REFACTOR THIS TO DISPLAY TEXTITEM BASED ON LANGUAGE
+                if (
+                  b.slice_type === "text" &&
+                  this.state.language === "english"
+                ) {
                   const text = RichText.render(
                     b.primary.richtext,
                     linkResolver
                   );
                   return <TextItem text={text} key={generateKey("text")} />;
+                } else if (
+                  b.slice_type === "spanishtext" &&
+                  this.state.language === "spanish"
+                ) {
+                  const spanishtext = RichText.render(
+                    b.primary.richtext,
+                    linkResolver
+                  );
+                  return (
+                    <TextItem
+                      text={spanishtext}
+                      key={generateKey("spanishtext")}
+                    />
+                  );
                 } else if (b.slice_type === "image") {
                   const imageSrc = b.primary.image.url;
-                  // console.log(b);
-
                   padding.left = b.primary.padding_left;
                   padding.right = b.primary.padding_right;
                   padding.top = b.primary.padding_top;
